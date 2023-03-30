@@ -18,9 +18,9 @@ const { JSDOM } = require('jsdom');
 const { writeFileSync, existsSync, mkdirSync } = require('fs');
 (async () => {
   await loadOpenCV();
-  const image = await loadImage('rushdi.jpg');
+  const image = await loadImage('lena.jpg');
   const src = cv.imread(image);
-  await copyFile(src);
+  //await copyFile(src);
   let gray = new cv.Mat();
   console.log('image loaded');
   cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
@@ -35,13 +35,13 @@ const { writeFileSync, existsSync, mkdirSync } = require('fs');
   console.log(gray.shape);
   // Load pre-trained classifier files. Notice how we reference local files using relative paths just
   // like we normally would do
-  //faceCascade.load('./haarcascade_frontalface_default.xml');
+  faceCascade.load('./haarcascade_frontalface_default.xml');
   // eyeCascade.load('./haarcascade_eye.xml');
   console.log(`faceCascade`);
-  //console.log(faceCascade.empty());
+  console.log(faceCascade.empty());
 
   //let mSize = new cv.Size(0, 0);
-  /*faceCascade.detectMultiScale(gray, faces, 1.1, 3, 0, mSize, mSize);
+  faceCascade.detectMultiScale(gray, faces, 1.1, 3, 0, mSize, mSize);
   for (let i = 0; i < faces.size(); ++i) {
     let roiGray = gray.roi(faces.get(i));
     let roiSrc = src.roi(faces.get(i));
@@ -54,7 +54,7 @@ const { writeFileSync, existsSync, mkdirSync } = require('fs');
   const canvas = createCanvas(image.width, image.height);
   cv.imshow(canvas, src);
   writeFileSync('output3.jpg', canvas.toBuffer('image/jpeg'));
-  src.delete(); gray.delete(); faceCascade.delete(); eyeCascade.delete(); faces.delete(); eyes.delete()*/
+  src.delete(); gray.delete(); faceCascade.delete(); eyeCascade.delete(); faces.delete(); eyes.delete()
 })();
 /**
  * Loads opencv.js.
