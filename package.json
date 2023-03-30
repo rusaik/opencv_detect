@@ -1,0 +1,17 @@
+{
+  "name": "opencv",
+  "version": "1.0.0",
+  "description": "Opencv apis ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "rusaik",
+  "license": "ISC",
+  "dependencies": {
+    "canvas": "^2.11.0",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
+    "jsdom": "^21.1.1"
+  }
+}
