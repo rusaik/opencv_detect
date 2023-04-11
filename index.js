@@ -1,21 +1,8 @@
-/*const http = require('http');
-
-const hostname = '127.0.0.1';
-const port = 3000;
-
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
-});
-
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});*/
 
 const { Canvas, createCanvas, Image, ImageData, loadImage } = require('canvas');
 const { JSDOM } = require('jsdom');
 const { writeFileSync, existsSync, mkdirSync } = require('fs');
+const Utils = require("./utils.js");
 (async () => {
   await loadOpenCV();
   const image = await loadImage('lena.jpg');
@@ -33,20 +20,32 @@ const { writeFileSync, existsSync, mkdirSync } = require('fs');
   let eyeCascade = new cv.CascadeClassifier();
   console.log('2');
   console.log(gray.shape);
+  let utils = new Utils('errorMessage');
+
+  let faceCascadeFile = 'haarcascade_frontalface_default.xml';
+  // let url = 'https://github.com/opencv/opencv/blob/4.x/data/haarcascades/haarcascade_frontalface_default.xml';
+  let url = "https://raw.githubusercontent.com/opencv/opencv/4.x/data/haarcascades/haarcascade_frontalface_default.xml";
+
+  await utils.createFileFromUrl(url, faceCascadeFile);
+  //, async () => {});
+  console.log(`faceCascade loading started`);
   // Load pre-trained classifier files. Notice how we reference local files using relative paths just
   // like we normally would do
-  faceCascade.load('./haarcascade_frontalface_default.xml');
+  faceCascade.load('haarcascade_frontalface_default.xml');
   // eyeCascade.load('./haarcascade_eye.xml');
   console.log(`faceCascade`);
   console.log(faceCascade.empty());
 
-  //let mSize = new cv.Size(0, 0);
+  let mSize = new cv.Size(0, 0);
   faceCascade.detectMultiScale(gray, faces, 1.1, 3, 0, mSize, mSize);
   for (let i = 0; i < faces.size(); ++i) {
+     console.log(i);
     let roiGray = gray.roi(faces.get(i));
     let roiSrc = src.roi(faces.get(i));
     let point1 = new cv.Point(faces.get(i).x, faces.get(i).y);
     let point2 = new cv.Point(faces.get(i).x + faces.get(i).width, faces.get(i).y + faces.get(i).height);
+    console.log(roiGray);
+  
     cv.rectangle(src, point1, point2, [255, 0, 0, 255]);
     roiGray.delete();
     roiSrc.delete();
